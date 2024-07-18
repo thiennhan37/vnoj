@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+map<int,int> mp,mm;
+ll POW(int x,int y){
+	if(y==0) return 1;
+	ll m=POW(x,y/2);
+	m=m*m;
+	if(y%2==0) return m;
+	else return m*x;
+}
+void f(int n){
+	for(int i=2;i*i<=n;i++){
+		if(n%i==0){
+			int cnt=0;
+			while(n%i==0){
+				cnt++;
+				n/=i;
+			}
+			mm[i]=max(mm[i],cnt);
+			mp[i]+=cnt;
+		}
+	}
+	if(n!=1){
+		mp[n]++;
+		mm[n]=max(mm[n],1);
+	}
+}
+int main()
+{
+	ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	int n;cin>>n;int a[n+1];
+	if(n==0){
+		cout<<"impossible";
+		return 0;
+	}
+	for(int i=0;i<n;i++) {
+		cin>>a[i];
+		if(a[i]==0){
+			cout<<"impossible";
+			return 0;
+		}
+		f(a[i]);
+	}
+	ll res=1;
+	for(auto x:mp){
+		res*=POW(x.first,x.second-mm[x.first]);
+	}
+	cout<<res;
+	return 0;
+}
